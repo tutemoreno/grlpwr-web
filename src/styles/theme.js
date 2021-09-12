@@ -1,3 +1,4 @@
+import { esES as coreEsES } from '@material-ui/core/locale';
 import { createTheme } from '@material-ui/core/styles';
 
-export const theme = createTheme({});
+export default createTheme({}, coreEsES);

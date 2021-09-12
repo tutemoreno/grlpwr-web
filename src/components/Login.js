@@ -1,9 +1,12 @@
 import { Eye, EyeOff } from 'mdi-material-ui';
-import React, { useReducer, useState } from 'react';
+import React, { useState } from 'react';
+import { SwitchTransition } from 'react-transition-group';
+import { useAlert, useAuth } from '../context';
 import {
   Box,
   Button,
   Checkbox,
+  Collapse,
   Container,
   FormControlLabel,
   Grid,
@@ -11,28 +14,43 @@ import {
   InputAdornment,
   Paper,
   TextField,
-} from '../components';
-import { useAlert, useAuth } from '../context';
-import { formReducer } from '../hooks';
+} from './';
 
 const initialState = {
   email: '',
   password: '',
+  passwordConfirm: '',
   remember: false,
 };
 
-export const Login = () => {
-  const [content, formDispatch] = useReducer(formReducer, initialState),
-    { email, password, remember } = content;
+export default function Login() {
+  const [state, setState] = useState(initialState),
+    { email, password, passwordConfirm, remember } = state;
   const [showPassword, setShowPassword] = useState(false);
+  const [mode, setMode] = useState('UP');
   const auth = useAuth();
   const { openAlert } = useAlert();
+
+  const modeState =
+    mode == 'IN'
+      ? {
+          signUpMode: false,
+          passwordAutocomplete: 'current-password',
+          submitLabel: 'Iniciar sesión',
+          switchLabel: 'Crear usuario',
+        }
+      : {
+          signUpMode: true,
+          passwordAutocomplete: 'new-password',
+          submitLabel: 'Crear usuario',
+          switchLabel: 'Ya tengo usuario',
+        };
 
   const signIn = async (e) => {
     e.preventDefault();
 
     try {
-      const loggedIn = await auth.signIn(content);
+      const loggedIn = await auth.signIn(state);
 
       if (loggedIn) window.scroll({ top: 0, behavior: 'smooth' });
       else openAlert('Usuario/Contraseña incorrectos', 'error');
@@ -51,12 +69,10 @@ export const Login = () => {
               <Grid item xs={12}>
                 <TextField
                   required
-                  fullWidth
-                  id="email"
                   label="Email"
                   name="email"
                   value={email}
-                  onChange={formDispatch}
+                  setState={setState}
                   autoComplete="email"
                   autoFocus
                 />
@@ -64,14 +80,12 @@ export const Login = () => {
               <Grid item xs={12}>
                 <TextField
                   required
-                  fullWidth
                   name="password"
-                  label="Password"
+                  label="Contraseña"
                   type={showPassword ? 'text' : 'password'}
-                  id="password"
                   value={password}
-                  onChange={formDispatch}
-                  autoComplete="current-password"
+                  setState={setState}
+                  autoComplete={modeState.passwordAutocomplete}
                   InputProps={{
                     endAdornment: (
                       <InputAdornment position="end">
@@ -86,34 +100,88 @@ export const Login = () => {
                   }}
                 />
               </Grid>
-              <Grid item>
+              <Grid item xs={12}>
+                <SwitchTransition>
+                  <Collapse key={mode} timeout={500}>
+                    {modeState.signUpMode ? (
+                      <TextField
+                        required={modeState.signUpMode}
+                        name="passwordConfirm"
+                        label="Confirmar contraseña"
+                        type={showPassword ? 'text' : 'password'}
+                        value={passwordConfirm}
+                        setState={setState}
+                        autoComplete="new-password"
+                        InputProps={{
+                          endAdornment: (
+                            <InputAdornment position="end">
+                              <IconButton
+                                color="primary"
+                                onClick={() =>
+                                  setShowPassword((value) => !value)
+                                }
+                              >
+                                {showPassword ? <Eye /> : <EyeOff />}
+                              </IconButton>
+                            </InputAdornment>
+                          ),
+                        }}
+                      />
+                    ) : (
+                      <FormControlLabel
+                        control={
+                          <Checkbox
+                            name="remember"
+                            checked={remember}
+                            setState={setState}
+                            color="primary"
+                          />
+                        }
+                        name="remember"
+                        label="Recordarme"
+                      />
+                    )}
+                  </Collapse>
+                </SwitchTransition>
+              </Grid>
+              {/* <Grid item>
                 <FormControlLabel
                   control={
                     <Checkbox
                       name="remember"
                       checked={remember}
-                      onChange={formDispatch}
+                      setState={setState}
                       color="primary"
                     />
                   }
                   name="remember"
-                  label="Remember"
+                  label="Recordarme"
                 />
+              </Grid> */}
+              <Grid item xs={12}>
+                <Button type="submit" color="primary">
+                  {modeState.submitLabel}
+                </Button>
               </Grid>
               <Grid item xs={12}>
-                <Button type="submit" fullWidth color="primary">
-                  Sign in
+                <Button
+                  color="secondary"
+                  onClick={() =>
+                    setMode((mode) => (mode == 'IN' ? 'UP' : 'IN'))
+                  }
+                >
+                  {modeState.switchLabel}
                 </Button>
               </Grid>
               {/* <Grid item xs={12}>
                   <Link href="#" variant="body2">
                     Olvidé mi contraseña
                   </Link>
-                </Grid> */}
+                  </Grid> */}
             </Grid>
           </form>
         </Paper>
       </Box>
     </Container>
   );
-};
+}

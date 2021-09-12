@@ -12,19 +12,6 @@ const {
   AuthContext = createContext();
 
 export function AuthProvider({ children }) {
-  const auth = useProvideAuth();
-
-  return <AuthContext.Provider value={auth}>{children}</AuthContext.Provider>;
-}
-AuthProvider.propTypes = {
-  children: PropTypes.element.isRequired,
-};
-
-export const useAuth = () => {
-  return useContext(AuthContext);
-};
-
-function useProvideAuth() {
   const store = getStore(REACT_APP_STORE_PATH);
   const [user, setUser] = useState(store ? store : null);
 
@@ -62,9 +49,22 @@ function useProvideAuth() {
     setUser(null);
   };
 
-  return {
-    user,
-    signIn,
-    signOut,
-  };
+  return (
+    <AuthContext.Provider
+      value={{
+        user,
+        signIn,
+        signOut,
+      }}
+    >
+      {children}
+    </AuthContext.Provider>
+  );
 }
+AuthProvider.propTypes = {
+  children: PropTypes.element.isRequired,
+};
+
+export const useAuth = () => {
+  return useContext(AuthContext);
+};

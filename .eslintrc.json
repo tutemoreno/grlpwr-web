@@ -1,11 +1,10 @@
 {
   "env": {
     "browser": true,
-    "es2021": true
+    "es2021": true,
+    "node": true
   },
   "extends": [
-    "react-app",
-    "react-app/jest",
     "eslint:recommended",
     "plugin:react/recommended",
     "plugin:react-hooks/recommended",
@@ -24,6 +23,7 @@
     "no-mixed-spaces-and-tabs": "off",
     "no-unexpected-multiline": "off",
     "no-unused-vars": "warn",
-    "eqeqeq": "off"
+    "eqeqeq": "off",
+    "react-hooks/exhaustive-deps": "off"
   }
 }

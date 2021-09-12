@@ -1,11 +1,4 @@
-import {
-  Box,
-  Button,
-  Grid,
-  Grow,
-  makeStyles,
-  Typography,
-} from '@material-ui/core';
+import { Box, Grid, Grow, makeStyles, Typography } from '@material-ui/core';
 import {
   BarcodeScan,
   CardAccountDetailsOutline,
@@ -14,7 +7,6 @@ import {
 } from 'mdi-material-ui';
 import PropTypes from 'prop-types';
 import React from 'react';
-import { useHistory } from 'react-router-dom';
 import { Login } from '../components';
 
 const useStyles = makeStyles(({ palette, spacing }) => ({
@@ -56,7 +48,7 @@ const useStyles = makeStyles(({ palette, spacing }) => ({
   },
 }));
 
-export const Home = ({ isAuthenticated }) => {
+export default function Home() {
   const classes = useStyles();
 
   return (
@@ -83,7 +75,9 @@ export const Home = ({ isAuthenticated }) => {
           </Typography>
         </Box>
         <Grow in={true} timeout={1000}>
-          <Box mt={3}>{isAuthenticated ? <FormStart /> : <Login />}</Box>
+          <Box mt={3}>
+            <Login />
+          </Box>
         </Grow>
       </Box>
       <Grid className={classes.gridBody} container justifyContent="center">
@@ -107,32 +101,6 @@ export const Home = ({ isAuthenticated }) => {
         />
       </Grid>
     </>
-  );
-};
-Home.propTypes = {
-  isAuthenticated: PropTypes.bool.isRequired,
-};
-
-function FormStart() {
-  const classes = useStyles();
-  const history = useHistory();
-
-  return (
-    <form
-      onSubmit={(e) => {
-        e.preventDefault();
-        history.push('/paciente');
-      }}
-    >
-      <Button
-        type="submit"
-        variant="contained"
-        className={classes.button}
-        size="large"
-      >
-        Comenzar a escanear
-      </Button>
-    </form>
   );
 }
 
