@@ -1,15 +1,16 @@
-import { Eye, EyeOff } from 'mdi-material-ui';
-import React, { useState } from 'react';
+import { useTheme } from '@material-ui/core/styles';
+import { CheckboxMarkedCircleOutline, Eye, EyeOff } from 'mdi-material-ui';
+import React, { useMemo, useState } from 'react';
 import { SwitchTransition } from 'react-transition-group';
 import { useAlert, useAuth } from '../context';
 import {
   Box,
   Button,
   Checkbox,
-  Collapse,
   Container,
   FormControlLabel,
   Grid,
+  Grow,
   IconButton,
   InputAdornment,
   Paper,
@@ -24,6 +25,7 @@ const initialState = {
 };
 
 export default function Login() {
+  const { palette } = useTheme();
   const [state, setState] = useState(initialState),
     { email, password, passwordConfirm, remember } = state;
   const [showPassword, setShowPassword] = useState(false);
@@ -31,20 +33,23 @@ export default function Login() {
   const auth = useAuth();
   const { openAlert } = useAlert();
 
-  const modeState =
-    mode == 'IN'
-      ? {
-          signUpMode: false,
-          passwordAutocomplete: 'current-password',
-          submitLabel: 'Iniciar sesión',
-          switchLabel: 'Crear usuario',
-        }
-      : {
-          signUpMode: true,
-          passwordAutocomplete: 'new-password',
-          submitLabel: 'Crear usuario',
-          switchLabel: 'Ya tengo usuario',
-        };
+  const modeState = useMemo(
+    () =>
+      mode == 'IN'
+        ? {
+            signUpMode: false,
+            passwordAutocomplete: 'current-password',
+            submitLabel: 'Iniciar sesión',
+            switchLabel: 'Crear usuario',
+          }
+        : {
+            signUpMode: true,
+            passwordAutocomplete: 'new-password',
+            submitLabel: 'Crear usuario',
+            switchLabel: 'Ya tengo usuario',
+          },
+    [mode],
+  );
 
   const signIn = async (e) => {
     e.preventDefault();
@@ -72,9 +77,28 @@ export default function Login() {
                   label="Email"
                   name="email"
                   value={email}
-                  setState={setState}
+                  onChange={(e) => {
+                    setState((prevState) => ({
+                      ...prevState,
+                      email: e.target.value,
+                    }));
+                  }}
                   autoComplete="email"
                   autoFocus
+                  InputProps={{
+                    endAdornment: modeState.signUpMode && (
+                      <InputAdornment position="end">
+                        <IconButton
+                          tabIndex={-1}
+                          onClick={() => setShowPassword((value) => !value)}
+                        >
+                          <CheckboxMarkedCircleOutline
+                            htmlColor={palette.success[palette.type]}
+                          />
+                        </IconButton>
+                      </InputAdornment>
+                    ),
+                  }}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -91,6 +115,7 @@ export default function Login() {
                       <InputAdornment position="end">
                         <IconButton
                           color="primary"
+                          tabIndex={-1}
                           onClick={() => setShowPassword((value) => !value)}
                         >
                           {showPassword ? <Eye /> : <EyeOff />}
@@ -102,7 +127,7 @@ export default function Login() {
               </Grid>
               <Grid item xs={12}>
                 <SwitchTransition>
-                  <Collapse key={mode} timeout={500}>
+                  <Grow key={mode} timeout={500}>
                     {modeState.signUpMode ? (
                       <TextField
                         required={modeState.signUpMode}
@@ -117,6 +142,7 @@ export default function Login() {
                             <InputAdornment position="end">
                               <IconButton
                                 color="primary"
+                                tabIndex={-1}
                                 onClick={() =>
                                   setShowPassword((value) => !value)
                                 }
@@ -141,7 +167,7 @@ export default function Login() {
                         label="Recordarme"
                       />
                     )}
-                  </Collapse>
+                  </Grow>
                 </SwitchTransition>
               </Grid>
               {/* <Grid item>

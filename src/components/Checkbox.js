@@ -15,7 +15,7 @@ export default function Checkbox({ name, setState, ...rest }) {
     [],
   );
 
-  return <Component id={name} name={name} onChange={onChange} {...rest} />;
+  return <Component name={name} size="small" onChange={onChange} {...rest} />;
 }
 Checkbox.propTypes = {
   name: PropTypes.string,

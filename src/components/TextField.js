@@ -8,7 +8,7 @@ export default function TextField({ name, setState, ...rest }) {
       ? ({ target: { value } }) => {
           setState((prevState) => ({
             ...prevState,
-            [name]: value.toUpperCase(),
+            [name]: value,
           }));
         }
       : null,
@@ -17,10 +17,10 @@ export default function TextField({ name, setState, ...rest }) {
 
   return (
     <Component
-      id={name}
       name={name}
       variant="outlined"
       fullWidth
+      size="small"
       onChange={onChange}
       {...rest}
     />
