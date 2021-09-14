@@ -1,6 +1,13 @@
 import { useTheme } from '@material-ui/core/styles';
-import { CheckboxMarkedCircleOutline, Eye, EyeOff } from 'mdi-material-ui';
-import React, { useMemo, useState } from 'react';
+import axios from 'axios';
+import { debounce } from 'lodash';
+import {
+  CheckboxMarkedCircleOutline,
+  CloseCircleOutline,
+  Eye,
+  EyeOff,
+} from 'mdi-material-ui';
+import React, { useCallback, useMemo, useState } from 'react';
 import { SwitchTransition } from 'react-transition-group';
 import { useAlert, useAuth } from '../context';
 import {
@@ -24,12 +31,20 @@ const initialState = {
   remember: false,
 };
 
+const initialEmailState = {
+  helperText: '',
+  error: false,
+};
+
+const { REACT_APP_ACCOUNTS_SERVICE } = process.env;
+
 export default function Login() {
   const { palette } = useTheme();
   const [state, setState] = useState(initialState),
     { email, password, passwordConfirm, remember } = state;
   const [showPassword, setShowPassword] = useState(false);
-  const [mode, setMode] = useState('UP');
+  const [emailState, setEmailState] = useState(initialEmailState);
+  const [mode, setMode] = useState('IN');
   const auth = useAuth();
   const { openAlert } = useAlert();
 
@@ -60,9 +75,51 @@ export default function Login() {
       if (loggedIn) window.scroll({ top: 0, behavior: 'smooth' });
       else openAlert('Usuario/Contraseña incorrectos', 'error');
     } catch (error) {
-      console.log(error);
       openAlert('Error de comunicación', 'error');
     }
+  };
+
+  const validateEmail = useCallback(async (e) => {
+    if (e.target.value == '') setEmailState(initialEmailState);
+    else {
+      const emailInput = document.querySelector('#email');
+      console.log('validation', emailInput.checkValidity());
+
+      if (emailInput.checkValidity()) {
+        const {
+          data: { available, notifications },
+        } = await checkEmailAvailability(email);
+
+        setEmailState({
+          error: available,
+          helperText: notifications[0].message,
+        });
+      } else {
+        console.log('invalid');
+        setEmailState({
+          error: true,
+          helperText: 'Invalid email',
+        });
+      }
+    }
+  }, []);
+
+  const emailAdornment = () => {
+    if (modeState.signUpMode && emailState.helperText.length) {
+      return (
+        <InputAdornment position="start">
+          <Box p={0.5} display="flex">
+            {emailState.error ? (
+              <CloseCircleOutline color="error" />
+            ) : (
+              <CheckboxMarkedCircleOutline
+                htmlColor={palette.success[palette.type]}
+              />
+            )}
+          </Box>
+        </InputAdornment>
+      );
+    } else return null;
   };
 
   return (
@@ -74,30 +131,18 @@ export default function Login() {
               <Grid item xs={12}>
                 <TextField
                   required
+                  id="email"
                   label="Email"
                   name="email"
+                  type="email"
                   value={email}
-                  onChange={(e) => {
-                    setState((prevState) => ({
-                      ...prevState,
-                      email: e.target.value,
-                    }));
-                  }}
+                  setState={setState}
+                  onChange={debounce(validateEmail, 500)}
                   autoComplete="email"
                   autoFocus
+                  {...emailState}
                   InputProps={{
-                    endAdornment: modeState.signUpMode && (
-                      <InputAdornment position="end">
-                        <IconButton
-                          tabIndex={-1}
-                          onClick={() => setShowPassword((value) => !value)}
-                        >
-                          <CheckboxMarkedCircleOutline
-                            htmlColor={palette.success[palette.type]}
-                          />
-                        </IconButton>
-                      </InputAdornment>
-                    ),
+                    endAdornment: emailAdornment(),
                   }}
                 />
               </Grid>
@@ -210,4 +255,12 @@ export default function Login() {
       </Box>
     </Container>
   );
+}
+
+async function checkEmailAvailability(email) {
+  return await axios({
+    method: 'post',
+    url: `${REACT_APP_ACCOUNTS_SERVICE}/checkEmailAvailability`,
+    data: { email },
+  });
 }

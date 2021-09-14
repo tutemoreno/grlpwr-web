@@ -3,7 +3,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-// import './utils/axiosConfig';
+import './utils/axiosConfig';
 
 ReactDOM.render(
   // <React.StrictMode>
