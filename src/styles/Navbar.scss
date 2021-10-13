@@ -1,0 +1,14 @@
+.toolbar-enter {
+  transform: scale(1);
+}
+.toolbar-enter-active {
+  transform: scale(1);
+  transition: all 300ms;
+}
+.toolbar-exit-done {
+  display: none;
+}
+.toolbar-exit-active {
+  transform: scale(0);
+  transition: all 300ms;
+}

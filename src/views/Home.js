@@ -1,18 +1,13 @@
-import { Box, Grid, Grow, makeStyles, Typography } from '@material-ui/core';
-import {
-  BarcodeScan,
-  CardAccountDetailsOutline,
-  PlaylistCheck,
-  WeightLifter,
-} from 'mdi-material-ui';
-import PropTypes from 'prop-types';
+import { Box, Grow, Typography } from '@mui/material';
+import { WeightLifter } from 'mdi-material-ui';
+import { makeStyles } from '@mui/styles';
 import React from 'react';
 import { Login } from '../components';
 
 const useStyles = makeStyles(({ palette, spacing }) => ({
   gridHeader: {
     color: palette.text.secondary,
-    backgroundColor: '#979733',
+    backgroundColor: palette.deepPurple[500],
   },
   gridBody: {
     backgroundColor: palette.grey[50],
@@ -80,47 +75,8 @@ export default function Home() {
           </Box>
         </Grow>
       </Box>
-      <Grid className={classes.gridBody} container justifyContent="center">
-        <GridItemStep
-          icon={<BarcodeScan className={classes.gridStepIcon} />}
-          title="Escaneo"
-          description="Escanee mediante código de barras para cargar la información del
-              tubo"
-        />
 
-        <GridItemStep
-          icon={<CardAccountDetailsOutline className={classes.gridStepIcon} />}
-          title="Paciente"
-          description="Escanee el DNI o ingrese los datos del paciente de forma manual"
-        />
-
-        <GridItemStep
-          icon={<PlaylistCheck className={classes.gridStepIcon} />}
-          title="Envío"
-          description="Envíe toda la información que se cargará automáticamente en el LIS"
-        />
-      </Grid>
+      <Box style={{ height: '800px' }}></Box>
     </>
   );
 }
-
-function GridItemStep({ icon, title, description }) {
-  const classes = useStyles();
-
-  return (
-    <Grid item xs={12} lg={3} className={classes.gridStep}>
-      <Box display="flex" flexDirection="column" alignItems="center">
-        {icon}
-        <Typography component="h1" variant="h5" className={classes.stepTitle}>
-          {title}
-        </Typography>
-        <Typography component="h1">{description}</Typography>
-      </Box>
-    </Grid>
-  );
-}
-GridItemStep.propTypes = {
-  icon: PropTypes.element.isRequired,
-  title: PropTypes.string.isRequired,
-  description: PropTypes.string.isRequired,
-};

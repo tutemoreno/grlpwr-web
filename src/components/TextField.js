@@ -1,4 +1,4 @@
-import Component from '@material-ui/core/TextField';
+import Component from '@mui/material/TextField';
 import PropTypes from 'prop-types';
 import React, { useCallback } from 'react';
 

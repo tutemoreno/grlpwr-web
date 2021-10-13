@@ -1,5 +1,4 @@
-import { Snackbar } from '@material-ui/core';
-import Alert from '@material-ui/lab/Alert';
+import { Snackbar, Alert } from '@mui/material';
 import PropTypes from 'prop-types';
 import React, { createContext, useContext, useState } from 'react';
 

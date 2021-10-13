@@ -1,4 +1,4 @@
-import Component from '@material-ui/core/Checkbox';
+import Component from '@mui/material/Checkbox';
 import PropTypes from 'prop-types';
 import React, { useCallback } from 'react';
 

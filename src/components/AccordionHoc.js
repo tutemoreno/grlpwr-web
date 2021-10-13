@@ -3,7 +3,7 @@ import {
   AccordionDetails,
   AccordionSummary,
   Typography,
-} from '@material-ui/core';
+} from '@mui/material';
 import ChevronDown from 'mdi-material-ui/ChevronDown';
 import PropTypes from 'prop-types';
 import React from 'react';

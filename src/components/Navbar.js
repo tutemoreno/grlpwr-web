@@ -7,12 +7,14 @@ import {
   Toolbar,
   Typography,
   useScrollTrigger,
-} from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
+} from './';
+import { makeStyles } from '@mui/styles';
 import Menu from 'mdi-material-ui/Menu';
 import PropTypes from 'prop-types';
 import React from 'react';
 import { useAuth } from '../context';
+import { CSSTransition } from 'react-transition-group';
+import '../styles/Navbar.scss';
 
 const useStyles = makeStyles(() => ({
   toolbar: {
@@ -31,7 +33,7 @@ export const Navbar = () => {
     <>
       <HideOnScroll>
         <AppBar>
-          <Toolbar className={classes.toolbar}>
+          <Toolbar>
             <IconButton color="inherit">
               <Menu />
             </IconButton>
@@ -53,29 +55,20 @@ export const Navbar = () => {
           </Toolbar>
         </AppBar>
       </HideOnScroll>
-      <Box className={`MuiToolbar-regular ${classes.toolbar}`} />
+      <Toolbar />
     </>
   );
 };
 
-function HideOnScroll(props) {
-  const { children } = props;
-  // Note that you normally won't need to set the window ref as useScrollTrigger
-  // will default to window.
-  // This is only being set here because the demo is in an iframe.
+function HideOnScroll({ children }) {
   const trigger = useScrollTrigger();
 
   return (
-    <Slide direction="down" in={!trigger}>
+    <CSSTransition classNames="toolbar" timeout={300} in={!trigger}>
       {children}
-    </Slide>
+    </CSSTransition>
   );
 }
-
 HideOnScroll.propTypes = {
   children: PropTypes.element.isRequired,
-  /**
-   * Injected by the documentation to work in an iframe.
-   * You won't need it on your project.
-   */
 };

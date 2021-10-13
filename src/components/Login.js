@@ -1,4 +1,4 @@
-import { useTheme } from '@material-ui/core/styles';
+import { useTheme } from '@mui/material/styles';
 import axios from 'axios';
 import { debounce } from 'lodash';
 import {
