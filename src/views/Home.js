@@ -1,5 +1,4 @@
 import { Box, Grow, Typography } from '@mui/material';
-import { WeightLifter } from 'mdi-material-ui';
 import { makeStyles } from '@mui/styles';
 import React from 'react';
 import { Login } from '../components';
@@ -49,7 +48,7 @@ export default function Home() {
   return (
     <>
       <Box
-        className={classes.gridHeader}
+        _className={classes.gridHeader}
         display="flex"
         flexDirection="column"
         alignItems="center"
@@ -57,16 +56,16 @@ export default function Home() {
       >
         <Box display="flex" p={2} alignItems="center">
           <Typography component="h1" variant="h3" className={classes.title}>
-            Fit
+            Grl
           </Typography>
-          <WeightLifter className={classes.gridStepIcon} />
           <Typography component="h1" variant="h3" className={classes.title}>
-            ool
+            Pwr
           </Typography>
         </Box>
         <Box px={2}>
           <Typography component="h1" variant="h5" className={classes.subtitle}>
-            For athletes by athletes
+            Buscas una mujer que te marque para toda la vida? Aca tenes una
+            buena tatuadora
           </Typography>
         </Box>
         <Grow in={true} timeout={1000}>

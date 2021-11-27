@@ -13,8 +13,6 @@ import Menu from 'mdi-material-ui/Menu';
 import PropTypes from 'prop-types';
 import React from 'react';
 import { useAuth } from '../context';
-import { CSSTransition } from 'react-transition-group';
-import '../styles/Navbar.scss';
 
 const useStyles = makeStyles(() => ({
   toolbar: {
@@ -63,11 +61,7 @@ export const Navbar = () => {
 function HideOnScroll({ children }) {
   const trigger = useScrollTrigger();
 
-  return (
-    <CSSTransition classNames="toolbar" timeout={300} in={!trigger}>
-      {children}
-    </CSSTransition>
-  );
+  return <Slide in={!trigger}>{children}</Slide>;
 }
 HideOnScroll.propTypes = {
   children: PropTypes.element.isRequired,

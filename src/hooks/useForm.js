@@ -8,11 +8,20 @@ export const useFormState = (initialState) => {
   }, []);
 
   const onChange = useCallback((e) => {
-    const { name, value, type, checked } = e.target;
+    const { name, value } = e.target;
 
     setContent((prevState) => ({
       ...prevState,
-      [name]: type != 'checkbox' ? value : checked,
+      [name]: value,
+    }));
+  }, []);
+
+  const onCheckboxChange = useCallback((e) => {
+    const { name, checked } = e.target;
+
+    setContent((prevState) => ({
+      ...prevState,
+      [name]: checked,
     }));
   }, []);
 
@@ -21,6 +30,7 @@ export const useFormState = (initialState) => {
     setContent,
     setValue,
     onChange,
+    onCheckboxChange,
   };
 };
 
