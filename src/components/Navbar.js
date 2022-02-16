@@ -14,13 +14,9 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import { useAuth } from '../context';
 
-const useStyles = makeStyles(() => ({
-  toolbar: {
-    backgroundColor: '#979733',
-  },
-  title: {
-    flexGrow: 1,
-  },
+const useStyles = makeStyles(({ palette }) => ({
+  toolbar: { backgroundColor: palette.common.black },
+  title: { flexGrow: 1 },
 }));
 
 export const Navbar = () => {
@@ -53,7 +49,7 @@ export const Navbar = () => {
           </Toolbar>
         </AppBar>
       </HideOnScroll>
-      <Toolbar />
+      <Toolbar className={classes.toolbar} />
     </>
   );
 };

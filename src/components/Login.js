@@ -73,7 +73,7 @@ export default function Login() {
                       <IconButton
                         color="primary"
                         tabIndex={-1}
-                        onClick={() => setShowPassword((value) => !value)}
+                        onClick={() => setShowPassword((v) => !v)}
                       >
                         {showPassword ? <Eye /> : <EyeOff />}
                       </IconButton>

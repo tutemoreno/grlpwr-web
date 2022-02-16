@@ -5,7 +5,7 @@ import esLocale from 'date-fns/locale/es';
 import store from './store/index.js';
 import { AppRouter } from './routers';
 import { AuthProvider, SnackbarProvider } from './context';
-import { CssBaseline, useMediaQuery } from '@mui/material';
+import { CssBaseline, useMediaQuery, Box } from '@mui/material';
 import { Navbar } from './components';
 import { Provider } from 'react-redux';
 import { ThemeProvider } from '@mui/material/styles';
@@ -33,6 +33,11 @@ export default function App() {
             size: isMobile ? 'small' : 'medium',
           },
         },
+        MuiCheckbox: {
+          defaultProps: {
+            size: isMobile ? 'small' : 'medium',
+          },
+        },
       },
     }));
   }, [isMobile]);
@@ -45,10 +50,10 @@ export default function App() {
             <CssBaseline />
             <ThemeProvider theme={theme}>
               <SnackbarProvider>
-                <>
+                <Box height="100vh" bgcolor={theme.palette.common.black}>
                   <Navbar />
                   <AppRouter />
-                </>
+                </Box>
               </SnackbarProvider>
             </ThemeProvider>
           </>
